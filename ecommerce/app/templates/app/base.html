@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+{% load static %}
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title></title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {% comment %}
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.4/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-DQvkBjpPgn7RC31MCQoOeC9TI2kdqa4+BSgNMNj8v77fdC77Kj5zpWFTJaaAoMbC"
+      crossorigin="anonymous"
+    />
+    {% endcomment %}
+    <link rel="stylesheet" href="{% static 'app/css/bootstrap.min.css' %}" />
+    <link href="{% static 'app/css/owl.carousel.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'app/css/all.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'app/css/style.css' %}" rel="stylesheet" />
+    <title>E-commerce | {% block title %}{% endblock title %}</title>
+  </head>
+  <body>
+    <!--[if lt IE 7]>
+      <p class="browsehappy">
+        You are using an <strong>outdated</strong> browser. Please
+        <a href="#">upgrade your browser</a> to improve your experience.
+      </p>
+    <![endif]-->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+          <img src="{% static "app/images/Neel.png" %}" width="50" height="50" />
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Home</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Products
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{% url 'category' 'ML' %}">Milk</a></li>
+                <li><a class="dropdown-item" href="{% url 'category' 'CR' %}">Curd</a></li>
+                <li><a class="dropdown-item" href="{% url 'category' 'MS' %}">Milkshake</a></li>
+                <li><a class="dropdown-item" href="{% url 'category' 'LS' %}">Lassi</a></li>
+                <li><a class="dropdown-item" href="{% url 'category' 'GH' %}">Ghee</a></li>
+                <li><a class="dropdown-item" href="{% url 'category' 'PN' %}">Paneer</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white">About Us</a>
+            </li>
+           <li class="nav-item">
+              <a class="nav-link text-white">Contact Us</a>
+            </li>
+          </ul>
+          <form class="d-flex" role="search">
+            <input
+              class="form-control me-2"
+              type="search"
+              placeholder="Search"
+              aria-label="Search"
+            />
+            <button class="btn btn-outline-success" type="submit">
+              Search
+            </button>
+          </form>
+        </div>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              {% comment %} <img src="{% static "app/images/Neel.png" %}" width="50" height="50" alt="User Avatar" class="rounded-circle"> {% endcomment %}
+              Thiendd
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="#">Profile</a></li>
+              <li><a class="dropdown-item" href="#">Order</a></li>
+              <li><a class="dropdown-item" href="#">Change Password</a></li>
+              <li><a class="dropdown-item" href="#">Logout</a></li>
+            </ul>
+          </li>
+          <li class="nav-item mx-2">
+            <a href="#" class="nav-link text-white">Cart 4</a>
+          </li>
+          <li class="nav-item mx-2">
+            <a href="#" class="nav-link text-white">Wishlist 4</a>
+          </li>     
+          <li class="nav-item mx-2">
+            <a href="#" class="nav-link text-white">Login</a>
+          </li>
+          <li class="nav-item mx-2">
+            <a href="#" class="nav-link text-white">Registration</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    {% block banner_slider %} {% endblock banner_slider %}
+    {% block information %} {% endblock information %}
+    {% block main-content %} {% endblock main-content %}
+
+    <footer class="container-fluid fixed-bottom bg-success text-center p-2 mt-5">Copytright &copy; 2025 || Developer: Thiendd</footer>
+    <script src="{% static 'app/js/popper.min.js' %}"></script>
+    <script src="{% static 'app/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'app/js/jquery.min.js' %}"></script>
+    <script src="{% static 'app/js/all.min.js' %}"></script>
+    <script src="{% static 'app/js/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'app/js/myscript.js' %}"></script>
+  </body>
+</html>

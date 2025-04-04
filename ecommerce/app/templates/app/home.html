@@ -1,0 +1,114 @@
+{% extends "app/base.html" %} 
+{% load static %} 
+{% block title %}Home{% endblock title %} 
+
+{% block banner_slider %} 
+    <div id="carouselExample" class="carousel slide">
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="{% static "app/images/banner/b1.jpg" %}" class="d-block w-100 carousel-image" alt="banner image">
+        </div>
+        <div class="carousel-item active">
+            <img src="{% static "app/images/banner/b2.jpg" %}" class="d-block w-100 carousel-image" alt="banner image">
+        </div>
+        <div class="carousel-item active">
+            <img src="{% static "app/images/banner/b3.jpg" %}" class="d-block w-100 carousel-image" alt="banner image">
+        </div>
+        <div class="carousel-item active">
+            <img src="{% static "app/images/banner/b4.jpg" %}" class="d-block w-100 carousel-image" alt="banner image">
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+    </div>
+{% endblock banner_slider %}
+{% block information %}     
+    <div class="container">
+        <div class="row bg-success text-center p-5 text-white border-bottom shadow">
+            <h1 class="">Product</h1>
+            <small class="fs-5">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus.
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus.Lorem ipsum dolor
+                sit amet consectetur adipisicing elit. Quisquam, voluptatibus.
+            </small>
+        </div>
+    </div>
+{% endblock information %}
+
+
+{% block main-content %}
+    <div class="container">
+        <h2 class="text-center">Dairy Products</h2>
+        <br/><br/>
+       <div class="row justify-content-center">
+          <div class="col-md-3 col-sm-6 mb-4 d-flex justify-content-center">
+            <div class="card h-100 custom-card">
+                <img src="{% static 'app/images/product/buffalo-ghee.png' %}" class="card-img-top img-responsive" alt="Sản phẩm 1">
+                <div class="card-body">
+                    <h5 class="card-title">Tên sản phẩm 1</h5>
+                    <p class="card-text">Mô tả ngắn gọn về sản phẩm 1.</p>
+                    <a href="#" class="btn btn-primary">Details</a>
+                </div>
+            </div>
+           </div>
+            <div class="col-md-3 col-sm-6 mb-4 d-flex justify-content-center">
+                <div class="card h-100 custom-card">
+                    <img src="{% static 'app/images/product/buffalo-ghee.png' %}" class="card-img-top img-responsive" alt="Sản phẩm 1">
+                    <div class="card-body">
+                        <h5 class="card-title">Tên sản phẩm 1</h5>
+                        <p class="card-text">Mô tả ngắn gọn về sản phẩm 1.</p>
+                        <a href="#" class="btn btn-primary">Details</a>
+                    </div>
+                </div>
+           </div>
+            <div class="col-md-3 col-sm-6 mb-4 d-flex justify-content-center">
+                <div class="card h-100 custom-card">
+                    <img src="{% static 'app/images/product/buffalo-ghee.png' %}" class="card-img-top img-responsive" alt="Sản phẩm 1">
+                    <div class="card-body">
+                        <h5 class="card-title">Tên sản phẩm 1</h5>
+                        <p class="card-text">Mô tả ngắn gọn về sản phẩm 1.</p>
+                        <a href="#" class="btn btn-primary">Details</a>
+                    </div>
+                </div>
+           </div>
+          <div class="col-md-3 col-sm-6 mb-4 d-flex justify-content-center">
+            <div class="card h-100 custom-card">
+                <img src="{% static 'app/images/product/buffalo-ghee.png' %}" class="card-img-top img-responsive" alt="Sản phẩm 1">
+                <div class="card-body">
+                    <h5 class="card-title">Tên sản phẩm 1</h5>
+                    <p class="card-text">Mô tả ngắn gọn về sản phẩm 1.</p>
+                    <a href="#" class="btn btn-primary">Details</a>
+                </div>
+            </div>
+           </div>
+         <div class="col-md-3 col-sm-6 mb-4 d-flex justify-content-center">
+            <div class="card h-100 custom-card">
+                <img src="{% static 'app/images/product/buffalo-ghee.png' %}" class="card-img-top img-responsive" alt="Sản phẩm 1">
+                <div class="card-body">
+                    <h5 class="card-title">Tên sản phẩm 1</h5>
+                    <p class="card-text">Mô tả ngắn gọn về sản phẩm 1.</p>
+                    <a href="#" class="btn btn-primary">Details</a>
+                </div>
+            </div>
+           </div>
+          <div class="col-md-3 col-sm-6 mb-4 d-flex justify-content-center">
+            <div class="card h-100 custom-card">
+                <img src="{% static 'app/images/product/buffalo-ghee.png' %}" class="card-img-top img-responsive" alt="Sản phẩm 1">
+                <div class="card-body">
+                    <h5 class="card-title">Tên sản phẩm 1</h5>
+                    <p class="card-text">Mô tả ngắn gọn về sản phẩm 1.</p>
+                    <a href="#" class="btn btn-primary">Details</a>
+                </div>
+            </div>
+           </div>                      
+        </div>
+    </div>
+    <br/><br/>
+{% endblock main-content %}
+
+
