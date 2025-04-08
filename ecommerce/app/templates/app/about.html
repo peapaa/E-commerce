@@ -1,0 +1,43 @@
+{% extends "app/base.html" %} 
+{% load static %} 
+{% block title %}About{% endblock title %}
+
+{% block banner_slider %} 
+    <div id="carouselExample" class="carousel slide">
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="{% static "app/images/banner/b1.jpg" %}" class="d-block w-100 carousel-image" alt="banner image">
+        </div>
+        <div class="carousel-item active">
+            <img src="{% static "app/images/banner/b2.jpg" %}" class="d-block w-100 carousel-image" alt="banner image">
+        </div>
+        <div class="carousel-item active">
+            <img src="{% static "app/images/banner/b3.jpg" %}" class="d-block w-100 carousel-image" alt="banner image">
+        </div>
+        <div class="carousel-item active">
+            <img src="{% static "app/images/banner/b4.jpg" %}" class="d-block w-100 carousel-image" alt="banner image">
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+    </div>
+{% endblock banner_slider %}
+
+{% block main-content %} 
+    <div class="container mt-3">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h2 class="fw-bold text-center">About Us</h2>
+                <p class="lead text-center">Welcome to [Your Company Name], where we are committed to delivering top-quality products and services to our valued customers.</p>
+                <p class="text-center">With a team of experienced professionals, we strive to exceed customer expectations and provide sustainable value.</p>
+            </div>
+        </div>
+    </div>
+    <br /><br/>
+{% endblock main-content %}

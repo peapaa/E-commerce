@@ -1,0 +1,61 @@
+{% extends "app/base.html" %} 
+{% load static %} 
+{% block title %}Contact{% endblock title %} 
+
+{% block banner_slider %} 
+    <div id="carouselExample" class="carousel slide">
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="{% static "app/images/banner/b1.jpg" %}" class="d-block w-100 carousel-image" alt="banner image">
+        </div>
+        <div class="carousel-item active">
+            <img src="{% static "app/images/banner/b2.jpg" %}" class="d-block w-100 carousel-image" alt="banner image">
+        </div>
+        <div class="carousel-item active">
+            <img src="{% static "app/images/banner/b3.jpg" %}" class="d-block w-100 carousel-image" alt="banner image">
+        </div>
+        <div class="carousel-item active">
+            <img src="{% static "app/images/banner/b4.jpg" %}" class="d-block w-100 carousel-image" alt="banner image">
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+    </div>
+{% endblock banner_slider %}
+
+{% block main-content %} 
+   <section class="py-5 bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h2 class="fw-bold text-center">Contact Us</h2>
+                <p class="text-center">Have questions or need assistance? Fill out the form below, and we'll get back to you promptly.</p>
+                <form>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name" placeholder="Your Name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input type="email" class="form-control" id="email" placeholder="Your Email Address" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Message</label>
+                        <textarea class="form-control" id="message" rows="5" placeholder="Your Message" required></textarea>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Send Message</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock main-content %}
