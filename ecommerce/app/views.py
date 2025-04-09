@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views import View
 from .models import Product
 from django.db.models import Count
-from .forms import CustommerRegistratinForm
+from .forms import CustomerRegistratinForm, CustomerProfileForm
 from django.contrib import messages
 
 # Create your views here.
@@ -40,17 +40,31 @@ class ProductDetailView(View):
     
 class CustomerRegistrationView(View):
     def get(self, request):
-        form = CustommerRegistratinForm()
+        form = CustomerRegistratinForm()
         context = {'form': form}
         return render(request, 'app/customerregistration.html', context)
     
     def post(self, request):
-        form = CustommerRegistratinForm(request.POST)
+        form = CustomerRegistratinForm(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, 'Account created successfully')
             return render(request, 'app/home.html')
         else: 
-            messages.error(request, 'Invalid Input Data')
+            messages.warning(request, 'Invalid Input Data')
         context = {'form': form}
         return render(request, 'app/customerregistration.html', context)
+    
+# class LoginView:
+#     pass
+
+# class PasswordResetView:
+#     pass
+
+class ProfileView(View):
+    def get(self, request):
+        form = CustomerProfileForm()
+        context = {'form': form}
+        return render(request, 'app/profile.html', context)
+    def post(self, request):
+        return render(request, 'app/profile.html')

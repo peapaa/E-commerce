@@ -1,6 +1,6 @@
 {% extends "app/base.html" %} 
 {% load static %} 
-{% block title %}Customer Registration{% endblock title %} 
+{% block title %}Login{% endblock title %} 
 
 {% block main-content %} 
     <div class="container">
@@ -16,8 +16,9 @@
                             <div class="text-danger mb-1">{{ fm.errors|striptags }}</div>
                     {% endfor %}
                     <div class="my-3">
-                        <button type="submit" class="btn btn-primary">Register</button>
-                        <a href="{% url 'login' %}" class="text-danger">Login</a>
+                        <button type="submit" class="btn btn-primary">Login</button>
+                        <small><a href="{% url 'registration' %}" class="text-danger">Create an Acount</a></small>
+                        <small><a href="{% url 'password_reset' %}">Forgot Password?</a></small>
                     </div>
 
                     {% if form.non_field_errors %}
