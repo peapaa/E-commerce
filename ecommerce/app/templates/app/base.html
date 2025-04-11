@@ -100,8 +100,16 @@
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
               <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
               <li><a class="dropdown-item" href="#">Order</a></li>
-              <li><a class="dropdown-item" href="#">Change Password</a></li>
-              <li><a class="dropdown-item" href="#">Logout</a></li>
+              <li><a class="dropdown-item" href="{% url 'change_password' %}">Change Password</a></li>
+              <li>
+                <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                  {% csrf_token %}
+                  <button type="submit" class="dropdown-item" style="border: none; background: none; padding: '4px 16px'; margin: 0;">
+                    Logout
+                  </button>
+                </form>
+              </li>
+
             </ul>
           </li>
           <li class="nav-item mx-2">
