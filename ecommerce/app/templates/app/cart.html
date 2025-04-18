@@ -1,0 +1,56 @@
+{% extends "app/base.html" %} 
+{% load static %} 
+{% block title %}View Cart{% endblock title %} 
+
+{% block main-content %} 
+   <div class="container my-5">
+  <h2 class="text-center mb-4">Giỏ hàng của bạn</h2>
+
+  {% if cart_items %}
+    <div class="table-responsive">
+      <table class="table table-bordered align-middle text-center">
+        <thead class="table-dark">
+          <tr>
+            <th scope="col">Ảnh</th>
+            <th scope="col">Tên sản phẩm</th>
+            <th scope="col">Giá</th>
+            <th scope="col">Số lượng</th>
+            <th scope="col">Tổng</th>
+            <th scope="col">Hành động</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in cart_items %}
+            <tr>
+              <td><img src="{{ item.product.product_image.url }}" width="80" height="80" class="rounded" /></td>
+              <td>{{ item.product.title }}</td>
+              <td>{{ item.product.discounted_price|floatformat:0 }} đ</td>
+              <td>
+                <div class="input-group">
+                    <button class="btn btn-outline-secondary" type="submit" name="action" value="decrease">–</button>
+                    <span class="form-control text-center" style="width: 50px;">{{ item.quantity }}</span>
+                    <button class="btn btn-outline-secondary" type="submit" name="action" value="increase">+</button>
+                </div>
+              </td>
+              <td>{{ item.total_cost|floatformat:0 }} đ</td>
+              <td>
+                <a href="#" class="btn btn-sm btn-danger">Xóa</a>
+                {% comment %} {% url 'remove_from_cart' item.id %} {% endcomment %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="text-end mt-3">
+      <h4>Tổng cộng: <strong>{{ total_price|floatformat:0 }} đ</strong></h4>
+      <a href="#" class="btn btn-success mt-2">Thanh toán</a>
+      {% comment %} {% url 'checkout' %} {% endcomment %}
+    </div>
+
+  {% else %}
+    <div class="alert alert-info text-center">Giỏ hàng của bạn đang trống.</div>
+  {% endif %}
+</div>
+{% endblock main-content %}

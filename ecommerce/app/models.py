@@ -26,3 +26,26 @@ class Customer(models.Model):
 
     def __str__(self):
         return self.name
+
+class Cart(models.Model):
+    cart_id = models.CharField(unique=True, max_length=250, blank=True, null=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def total_cost(self):
+        return sum(item.total_cost() for item in self.items.all())
+
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, related_name='items', on_delete=models.CASCADE)
+    print("cart", cart.__dir__)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+
+    @property
+    def total_cost(self):
+        print("cart", self.cart)
+        return self.quantity * self.product.discounted_price
+    def __str__(self):
+        return f"{self.product.title} x {self.quantity}"
+

@@ -1,12 +1,15 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
-from .models import Product, Customer # Import Customer model
+from .models import Product, Customer, Cart, CartItem # Import Customer model
 from django.db.models import Count
 from .forms import CustomerRegistratinForm, CustomerProfileForm
 from django.contrib import messages
+from uuid import uuid4
 
 # Create your views here.
 def home(request):
+    print("sesstion", request.session.session_key)
+
     return render(request, 'app/home.html')
 
 def about(request):
@@ -120,25 +123,75 @@ class UpdateAddress(View):
         context = {'form': form} 
         return render(request, 'app/updateAddress.html', context)
     
-class ChangePassword(View):
-    def get(self, request, pk):
+# class ChangePassword(View):
+#     def get(self, request, pk):
+#         try:
+#             customer = Customer.objects.get(pk=pk)
+#             print("customer", customer.__dict__)
+#             form = CustomerProfileForm(instance=customer)
+#             context = {'form': form} 
+#         except Customer.DoesNotExist:
+#             form = CustomerProfileForm() 
+#             context = {'form': form}
+#         return render(request, 'app/changePassword.html', context)
+#     def post(self, request):
+#         print("123")
+#         # customer = Customer.objects.get(pk=pk)
+#         # form = CustomerProfileForm(request.POST, instance=customer)
+#         # print("form", form.__dict__)
+#         # if form.is_valid():
+#         #     form.save()
+#         #     messages.success(request, 'Address updated successfully!')
+#         # else:
+#         #     messages.warning(request, 'Invalid Input Data')
+#         # context = {'form': form} 
+#         return render(request, 'app/changePassword.html')
+
+def add_to_cart(request, product_id):
+    print("product_id", product_id)
+    product = get_object_or_404(Product, id=product_id)
+    print("product", product.id)
+    cart = check_login(request)
+    quantity = int(request.POST.get("quantity", 1))
+    cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+    if not created:
+        cart_item.quantity += quantity
+    else:
+        cart_item.quantity = quantity 
+    cart_item.save()
+    print("quantity", quantity)
+    return redirect('cart')
+
+def show_cart(request):
+    cart = check_login(request)
+    cart_items = cart.items.all() if cart else []
+    total_price = sum(item.total_cost for item in cart_items)
+    context =  {
+        'cart_items': cart_items,
+        'total_price': total_price,
+    }
+    return render(request, 'app/cart.html',context)
+
+def check_login(request):
+    if not request.session.session_key:
+        request.session.save()
+    session_key = request.session.session_key
+    if request.user.is_authenticated:
         try:
-            customer = Customer.objects.get(pk=pk)
-            print("customer", customer.__dict__)
-            form = CustomerProfileForm(instance=customer)
-            context = {'form': form} 
-        except Customer.DoesNotExist:
-            form = CustomerProfileForm() 
-            context = {'form': form}
-        return render(request, 'app/changePassword.html', context)
-    def post(self, request):
-        # customer = Customer.objects.get(pk=pk)
-        # form = CustomerProfileForm(request.POST, instance=customer)
-        # print("form", form.__dict__)
-        # if form.is_valid():
-        #     form.save()
-        #     messages.success(request, 'Address updated successfully!')
-        # else:
-        #     messages.warning(request, 'Invalid Input Data')
-        # context = {'form': form} 
-        return render(request, 'app/changePassword.html')
+            cart = Cart.objects.get(cart_id=str(session_key))
+            if cart.user is None:
+                cart.user = request.user
+                cart.save()
+            return cart
+        except Cart.DoesNotExist:
+            cart = Cart.objects.create(user=request.user)
+            return cart
+
+    try:
+        cart = Cart.objects.filter(cart_id=str(session_key)).first()
+        if cart is None:
+            cart = Cart.objects.create(cart_id=str(session_key))
+        return cart
+    except Exception as e:
+        print("Error in check_login:", e)
+        return None

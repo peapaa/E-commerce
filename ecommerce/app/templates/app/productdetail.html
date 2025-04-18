@@ -17,14 +17,19 @@
                 <ul class="fs-5">
                     <li>{{ product.description }}</li>
                 </ul>
-                <div class="buttons row flex">
-                    <button type="submit" class="btn btn-danger col-lg-4 col-sm-12 m-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <form method="POST" action="{% url 'add_to_cart' product.id %}" class="row">
+                    {% csrf_token %}
+                    <input type="hidden" name="quantity" value="1">
+                    
+                    <button type="submit" class="btn btn-danger col-lg-4 col-sm-12 m-2">
                         Add to Cart
                     </button>
+                </form>
+                <div class="buttons row flex">
                     <button type="submit" class="btn btn-dark col-lg-4 col-sm-12 m-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
                         <a href="#" class="text-decoration-none text-white">Buy Now</a>
                     </button>
-                </div>
+                </div> 
             </div>
         </div>
     </div>

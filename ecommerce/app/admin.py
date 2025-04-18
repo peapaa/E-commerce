@@ -11,3 +11,8 @@ class CustomerAdmin(admin.ModelAdmin):
     list_display = ['id', 'user', 'name', 'locality', 'city', 'zipcode']
 
 admin.site.register(models.Customer, CustomerAdmin)
+
+class CartAdmin(admin.ModelAdmin):
+    list_display = ['id', 'cart', 'product', 'quantity']
+
+admin.site.register(models.CartItem, CartAdmin)
