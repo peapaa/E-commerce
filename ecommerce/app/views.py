@@ -4,6 +4,8 @@ from .models import Product, Customer, Cart, CartItem # Import Customer model
 from django.db.models import Count
 from .forms import CustomerRegistratinForm, CustomerProfileForm
 from django.contrib import messages
+from django.contrib.auth.views import LoginView
+from .utils import merge_carts
 from uuid import uuid4
 
 # Create your views here.
@@ -173,25 +175,26 @@ def show_cart(request):
     return render(request, 'app/cart.html',context)
 
 def check_login(request):
-    if not request.session.session_key:
-        request.session.save()
-    session_key = request.session.session_key
-    if request.user.is_authenticated:
-        try:
-            cart = Cart.objects.get(cart_id=str(session_key))
-            if cart.user is None:
-                cart.user = request.user
-                cart.save()
-            return cart
-        except Cart.DoesNotExist:
-            cart = Cart.objects.create(user=request.user)
-            return cart
+    session_key = str(uuid4())
+
+    if not request.session.get("cart_id", None):
+        request.session['cart_id'] = session_key
+    else:
+        session_key = request.session['cart_id']
 
     try:
-        cart = Cart.objects.filter(cart_id=str(session_key)).first()
-        if cart is None:
-            cart = Cart.objects.create(cart_id=str(session_key))
-        return cart
-    except Exception as e:
-        print("Error in check_login:", e)
-        return None
+        cart = Cart.objects.get(cart_id=str(session_key))
+    except Cart.DoesNotExist:
+        cart = Cart.objects.create(cart_id=str(session_key))
+
+    if request.user.is_authenticated:
+        cart = Cart.objects.filter(cart_id=str(request.session['cart_id'])).first()
+        merge_carts(request)
+    
+    return cart
+
+# class CustomLoginView(LoginView):
+#     def form_valid(self, form):
+#         response = super().form_valid(form)
+#         merge_carts(self.request)
+#         return response
