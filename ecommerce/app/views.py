@@ -177,7 +177,7 @@ def show_cart(request):
 def check_login(request):
     session_key = str(uuid4())
 
-    if not request.session.get("cart_id", None):
+    if not request.session.get("cart_id"):
         request.session['cart_id'] = session_key
     else:
         session_key = request.session['cart_id']
