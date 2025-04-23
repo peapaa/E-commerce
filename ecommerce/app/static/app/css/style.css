@@ -115,3 +115,8 @@
     justify-content: flex-end;
     display: flex;
 }
+
+.positionToast{
+    top: 80px;
+    right: 0;
+  }
