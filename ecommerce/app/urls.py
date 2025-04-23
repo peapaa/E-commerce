@@ -35,7 +35,7 @@ urlpatterns = [
     path('password-reset-done/',auth_view.PasswordResetDoneView.as_view(template_name='app/passwordResetDone.html'), 
     name='password_reset_done'), 
     path('logout/',auth_view.LogoutView.as_view(next_page='login'), name='logout'), 
-    path('cart/update/<int:product_id>/', views.update_cart_quantity, name='update_cart_quantity'),
+    path('cart/update/', views.update_cart_quantity, name='update_cart_quantity'),
 
 
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,7 +1,12 @@
 {% extends "app/base.html" %} 
 {% load static %} 
 {% block title %}View Cart{% endblock title %} 
-
+<style>
+  .positionToast{
+    top: 80px;
+    right: 0;
+  }
+</style>
 {% block main-content %} 
    <div class="container my-5">
   <h2 class="text-center mb-4">Giỏ hàng của bạn</h2>
@@ -26,18 +31,17 @@
               <td>{{ item.product.title }}</td>
               <td>{{ item.product.discounted_price|floatformat:0 }} đ</td>
               <td>
-                <form method="POST" action="{% url 'update_cart_quantity' item.product.id %}">
                   <div class="input-group">
-                    {% csrf_token %}
-                    <button class="btn btn-outline-secondary" type="submit" name="action" value="decrease">–</button>
-                    <span class="form-control text-center" style="width: 50px;">{{ item.quantity }}</span>
-                    <button class="btn btn-outline-secondary" type="submit" name="action" value="increase">+</button>
+                    <button class="btn btn-outline-secondary change-quantity" data-id="{{ item.product.id }}" 
+                      data-action="decrease" {% if item.quantity <= 1 %}disabled{% endif %}>–</button>
+                    <span class="form-control text-center" id="quantity-{{ item.product.id }}" style="width: 50px;">{{ item.quantity }}</span>
+                    <button class="btn btn-outline-secondary change-quantity" data-id="{{ item.product.id }}" 
+                      data-action="increase">+</button>
                   </div>
-                </form>
               </td>
-              <td>{{ item.total_cost|floatformat:0 }} đ</td>
+              <td id="total-{{ item.product.id }}">{{ item.total_cost|floatformat:0 }} đ</td>
               <td>
-                <a href="#" class="btn btn-sm btn-danger">Xóa</a>
+                <button id="delete-cart-{{ item.product.id }}" class="btn btn-sm btn-danger">Xóa</button>
                 {% comment %} {% url 'remove_from_cart' item.id %} {% endcomment %}
               </td>
             </tr>
@@ -47,10 +51,9 @@
     </div>
 
     <div class="text-end mt-3">
-      <h4>Tổng cộng: <strong>{{ total_price|floatformat:0 }} đ</strong></h4>
+      <h4>Tổng cộng: <strong id="cart-total">{{ total_price|floatformat:0 }} đ</strong></h4>
       <div class="d-flex gap-3 justify-content-end mt-3">
         <a href="#" class="btn btn-success">Thanh toán</a>
-        <button class="btn btn-primary">Update cart</button>
       </div>
       {% comment %} {% url 'checkout' %} {% endcomment %}
     </div>
@@ -59,3 +62,57 @@
   {% endif %}
 </div>
 {% endblock main-content %}
+
+{% block js %} 
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const buttons = document.querySelectorAll(".change-quantity");
+    const csrftoken = document.querySelector('[name=csrf-token]').content;
+    console.log("buttons",buttons)
+    console.log("csrftoken",csrftoken)
+
+    buttons.forEach(btn => {
+      btn.addEventListener("click", function () {
+        const productId = this.dataset.id;
+        const action = this.dataset.action;
+
+        console.log("itemId:", productId);
+        console.log("action:", action);
+        fetch("/cart/update/",{
+          method: "POST",
+          headers: {
+            "X-CSRFToken": csrftoken,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            product_id: productId,
+            action: action
+          })
+        })
+        .then(response => response.json())
+        .then(data=> {
+          console.log("data",data)
+          if(data.success){
+            document.getElementById(`quantity-${productId}`).textContent = data.quantity;
+            document.getElementById(`total-${productId}`).textContent = data.total_item + ' đ';
+            document.getElementById("cart-total").textContent = data.total_cart + ' đ';
+            const decreaseBtn = document.querySelector(`.change-quantity[data-id="${productId}"][data-action="decrease"]`);
+            if(decreaseBtn){
+              decreaseBtn.disabled = data.quantity <= 1;
+            }
+          }
+          else {
+            toastr.options = {
+              "closeButton": true,
+              "progressBar": true,
+              "positionClass": "positionToast"
+            };
+            toastr.warning(data.message);
+          }
+        })
+      });
+    });
+  });
+</script>
+
+{% endblock js %}

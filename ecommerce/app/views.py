@@ -7,6 +7,8 @@ from django.contrib import messages
 from django.contrib.auth.views import LoginView
 from .utils import merge_carts
 from uuid import uuid4
+import json
+from django.http import JsonResponse
 
 # Create your views here.
 def home(request):
@@ -176,17 +178,37 @@ def check_login(request):
 #         merge_carts(self.request)
 #         return response
 
-def update_cart_quantity(request, product_id):
+def update_cart_quantity(request):
     if request.method == 'POST':
         cart = check_login(request)
-        action = request.POST.get('action')
-        product = get_object_or_404(Product, id=product_id)
-        cart_item = CartItem.objects.get(cart=cart, product=product)
-        if action == "increase":
-            cart_item.quantity +=1
-        elif action == "decrease" and cart_item.quantity > 1:
-            cart_item.quantity -=1
-        cart_item.save()
-        return redirect('cart')
+        data = json.loads(request.body)
+        product_id = data.get("product_id")
+        action = data.get("action")
+        try:
+            product = get_object_or_404(Product, id=product_id)
+            cart_item = CartItem.objects.get(cart=cart, product=product)
+            if action == "increase":
+                if cart_item.quantity < product.quantity:
+                    cart_item.quantity +=1
+                    cart_item.save()
+                else:
+                    return JsonResponse({
+                        "success": False,
+                        'message': 'Quantity exceeds inventory.'
+                    })
+            elif action == "decrease" and cart_item.quantity > 1:
+                cart_item.quantity -=1
+                cart_item.save()
+            total_item = cart_item.quantity * cart_item.product.discounted_price
+            total_cart = sum(item.quantity * item.product.discounted_price for item in CartItem.objects.filter(cart=cart))
+            return JsonResponse({
+                "success": True,
+                "quantity": cart_item.quantity,
+                "total_item": round(total_item, 2),
+                "total_cart": round(total_cart, 2),
+            })
+        except:
+            return JsonResponse({"success": False, "error": "Product not found"})
     else:
-        pass
+        return JsonResponse({"success": False, "error": "Invalid request"})
+    
