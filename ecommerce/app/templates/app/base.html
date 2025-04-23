@@ -23,7 +23,14 @@
     <link href="{% static 'app/css/owl.carousel.min.css' %}" rel="stylesheet" />
     <link href="{% static 'app/css/all.min.css' %}" rel="stylesheet" />
     <link href="{% static 'app/css/style.css' %}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
     <title>E-commerce | {% block title %}{% endblock title %}</title>
+    <style>
+      .positionToast{
+        top: 80px;
+        right: 0;
+      }
+    </style>
   </head>
   <body>
     <!--[if lt IE 7]>
@@ -143,5 +150,20 @@
     <script src="{% static 'app/js/all.min.js' %}"></script>
     <script src="{% static 'app/js/owl.carousel.min.js' %}"></script>
     <script src="{% static 'app/js/myscript.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+      {% if messages %}
+        {% for msg in messages %}    
+          toastr.options = {
+                "closeButton": true,
+                "progressBar": true,
+                "positionClass": "positionToast"
+          };
+          toastr["{{ msg.tags }}"]("{{ msg|escapejs }}");
+        {% endfor %}
+      {% endif %}
+    </script>
+
+    {% block js %} {% endblock js %}
   </body>
 </html>

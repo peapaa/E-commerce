@@ -26,11 +26,14 @@
               <td>{{ item.product.title }}</td>
               <td>{{ item.product.discounted_price|floatformat:0 }} đ</td>
               <td>
-                <div class="input-group">
+                <form method="POST" action="{% url 'update_cart_quantity' item.product.id %}">
+                  <div class="input-group">
+                    {% csrf_token %}
                     <button class="btn btn-outline-secondary" type="submit" name="action" value="decrease">–</button>
                     <span class="form-control text-center" style="width: 50px;">{{ item.quantity }}</span>
                     <button class="btn btn-outline-secondary" type="submit" name="action" value="increase">+</button>
-                </div>
+                  </div>
+                </form>
               </td>
               <td>{{ item.total_cost|floatformat:0 }} đ</td>
               <td>
@@ -45,10 +48,12 @@
 
     <div class="text-end mt-3">
       <h4>Tổng cộng: <strong>{{ total_price|floatformat:0 }} đ</strong></h4>
-      <a href="#" class="btn btn-success mt-2">Thanh toán</a>
+      <div class="d-flex gap-3 justify-content-end mt-3">
+        <a href="#" class="btn btn-success">Thanh toán</a>
+        <button class="btn btn-primary">Update cart</button>
+      </div>
       {% comment %} {% url 'checkout' %} {% endcomment %}
     </div>
-
   {% else %}
     <div class="alert alert-info text-center">Giỏ hàng của bạn đang trống.</div>
   {% endif %}

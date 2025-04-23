@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='product',
             name='product_image',
-            field=models.ImageField(upload_to=app.helper.rename_image),
+            field=models.ImageField(upload_to=app.helper.create_product_image_path),
         ),
         migrations.CreateModel(
             name='Customer',

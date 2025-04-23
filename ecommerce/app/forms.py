@@ -37,7 +37,7 @@ class CustomerProfileForm(forms.ModelForm):
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Name'}),
             'locality': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Locality'}),
             'city': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'City'}),
-            'mobile': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Mobile Number'}),
+            'mobile': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Mobile Number'}),
             'state': forms.Select(attrs={'class': 'form-control'}),
             'zipcode': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Zipcode'})
         }

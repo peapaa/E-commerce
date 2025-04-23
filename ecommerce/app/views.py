@@ -125,29 +125,6 @@ class UpdateAddress(View):
         context = {'form': form} 
         return render(request, 'app/updateAddress.html', context)
     
-# class ChangePassword(View):
-#     def get(self, request, pk):
-#         try:
-#             customer = Customer.objects.get(pk=pk)
-#             print("customer", customer.__dict__)
-#             form = CustomerProfileForm(instance=customer)
-#             context = {'form': form} 
-#         except Customer.DoesNotExist:
-#             form = CustomerProfileForm() 
-#             context = {'form': form}
-#         return render(request, 'app/changePassword.html', context)
-#     def post(self, request):
-#         print("123")
-#         # customer = Customer.objects.get(pk=pk)
-#         # form = CustomerProfileForm(request.POST, instance=customer)
-#         # print("form", form.__dict__)
-#         # if form.is_valid():
-#         #     form.save()
-#         #     messages.success(request, 'Address updated successfully!')
-#         # else:
-#         #     messages.warning(request, 'Invalid Input Data')
-#         # context = {'form': form} 
-#         return render(request, 'app/changePassword.html')
 
 def add_to_cart(request, product_id):
     print("product_id", product_id)
@@ -198,3 +175,18 @@ def check_login(request):
 #         response = super().form_valid(form)
 #         merge_carts(self.request)
 #         return response
+
+def update_cart_quantity(request, product_id):
+    if request.method == 'POST':
+        cart = check_login(request)
+        action = request.POST.get('action')
+        product = get_object_or_404(Product, id=product_id)
+        cart_item = CartItem.objects.get(cart=cart, product=product)
+        if action == "increase":
+            cart_item.quantity +=1
+        elif action == "decrease" and cart_item.quantity > 1:
+            cart_item.quantity -=1
+        cart_item.save()
+        return redirect('cart')
+    else:
+        pass

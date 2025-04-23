@@ -2,6 +2,8 @@ from django.db import models
 from .define import CATEGORY_CHOICES, STATE_CHOICES
 from .helper import *
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+
 # Create your models here.
 
 class Product(models.Model):
@@ -11,7 +13,8 @@ class Product(models.Model):
     description = models.TextField()
     composition = models.TextField(default='')
     category = models.CharField(choices=CATEGORY_CHOICES,max_length=100)
-    product_image = models.ImageField(upload_to=rename_image)
+    product_image = models.ImageField(upload_to=create_product_image_path)
+    quantity = models.IntegerField(default=1)
     def __str__(self):
         return self.title
     
@@ -48,4 +51,11 @@ class CartItem(models.Model):
         return self.quantity * self.product.discounted_price
     def __str__(self):
         return f"{self.product.title} x {self.quantity}"
+    def clean(self):
+        if self.quantity < 1:
+            raise ValidationError("Số lượng sản phẩm phải lớn hơn hoặc bằng 1")
+
+    def save(self, *args, **kwargs):
+        self.full_clean() 
+        super().save(*args, **kwargs)
 
