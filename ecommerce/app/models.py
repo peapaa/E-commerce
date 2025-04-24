@@ -44,7 +44,6 @@ class CartItem(models.Model):
     print("cart", cart.__dir__)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
-
     @property
     def total_cost(self):
         print("cart", self.cart)

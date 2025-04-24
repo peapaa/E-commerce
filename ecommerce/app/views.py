@@ -9,6 +9,8 @@ from .utils import merge_carts
 from uuid import uuid4
 import json
 from django.http import JsonResponse
+from django.utils import timezone
+
 
 # Create your views here.
 def home(request):
@@ -145,7 +147,7 @@ def add_to_cart(request, product_id):
 
 def show_cart(request):
     cart = check_login(request)
-    cart_items = cart.items.all() if cart else []
+    cart_items =  cart.items.all() if cart else []
     total_price = sum(item.total_cost for item in cart_items)
     context =  {
         'cart_items': cart_items,
@@ -178,8 +180,8 @@ def check_login(request):
 #         merge_carts(self.request)
 #         return response
 
-def update_cart_quantity(request):
-    if request.method == 'POST':
+class UpdateCart(View):
+    def post(self, request):
         cart = check_login(request)
         data = json.loads(request.body)
         product_id = data.get("product_id")
@@ -209,6 +211,20 @@ def update_cart_quantity(request):
             })
         except:
             return JsonResponse({"success": False, "error": "Product not found"})
-    else:
-        return JsonResponse({"success": False, "error": "Invalid request"})
+    
+    def delete(self, request):
+        cart = check_login(request)
+        data = json.loads(request.body)
+        product_id = data.get("product_id")
+        try:
+            product = get_object_or_404(Product, id=product_id)
+            cart_item = CartItem.objects.get(cart=cart, product=product)
+            cart_item.delete()
+            total_cart = sum(item.quantity * item.product.discounted_price for item in CartItem.objects.filter(cart=cart))
+            return JsonResponse({
+                "success": True,
+                "message": "Cart item deleted",
+                "total_cart": round(total_cart, 2)})
+        except CartItem.DoesNotExist:
+            return JsonResponse({"success": False, "error": "Cart item not found"})
     
