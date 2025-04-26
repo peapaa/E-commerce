@@ -9,14 +9,14 @@ from .utils import merge_carts
 from uuid import uuid4
 import json
 from django.http import JsonResponse
-from django.utils import timezone
-
+from .utils import paginate_queryset
 
 # Create your views here.
 def home(request):
-    print("sesstion", request.session.session_key)
-
-    return render(request, 'app/home.html')
+    products = Product.objects.all().order_by('-created_at')
+    page_obj,page_range = paginate_queryset(request, products)
+    context = {'page_obj': page_obj, 'page_range': page_range}
+    return render(request, 'app/home.html',context)
 
 def about(request):
     return render(request, 'app/about.html')
@@ -28,14 +28,16 @@ class CategoryView(View):
     def get(self, request,val):
         products = Product.objects.filter(category=val)
         title = Product.objects.filter(category=val).values('title').annotate(total=Count('title'))
-        context = {'val': val, 'products': products, 'title': title}
+        page_obj,page_range = paginate_queryset(request, products)
+        context = {'val': val, 'products': products, 'title': title, 'page_obj': page_obj, 'page_range': page_range}
         return render(request, 'app/category.html', context)
     
 class CategoryTitle(View):
     def get(self, request,val):
         products = Product.objects.filter(title=val)
         title = Product.objects.filter(category=products[0].category).values('title')
-        context = {'val': val, 'products': products, 'title': title}
+        page_obj,page_range = paginate_queryset(request, products)
+        context = {'val': val, 'products': products, 'title': title, 'page_obj': page_obj, 'page_range': page_range}
         return render(request, 'app/category.html', context)
     
 class ProductDetailView(View):

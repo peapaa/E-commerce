@@ -15,6 +15,7 @@ class Product(models.Model):
     category = models.CharField(choices=CATEGORY_CHOICES,max_length=100)
     product_image = models.ImageField(upload_to=create_product_image_path)
     quantity = models.IntegerField(default=1)
+    created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return self.title
     
