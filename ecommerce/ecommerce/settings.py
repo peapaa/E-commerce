@@ -143,6 +143,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = '/profile/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'thienqxa123@gmail.com'       
+# EMAIL_HOST_PASSWORD = 'admin123'  
+# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 MESSAGE_TAGS = {
     messages.DEBUG: 'debug',
@@ -154,3 +160,5 @@ MESSAGE_TAGS = {
 
 TIME_ZONE = 'Asia/Ho_Chi_Minh'  
 USE_TZ = True  
+
+AUTH_USER_MODEL = 'app.Customer'

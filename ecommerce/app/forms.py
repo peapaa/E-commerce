@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from .models import Customer
 
 class LoginForm(AuthenticationForm):
-    username = UsernameField(widget=forms.TextInput(attrs={'autofocus': 'True', 'class': 'form-control', 'placeholder': 'Username'}))
+    username = forms.EmailField(label="Email", widget=forms.EmailInput(attrs={'autofocus': True, 'class': 'form-control', 'placeholder': 'Email'}))
     password = forms.CharField(label='Password', widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'}))
 
 class CustomerRegistratinForm(UserCreationForm):
@@ -12,7 +12,6 @@ class CustomerRegistratinForm(UserCreationForm):
     email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}))
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'}))
     password2 = forms.CharField(label='Confirm Password',widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirm Password'}))
-
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']

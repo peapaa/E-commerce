@@ -8,7 +8,7 @@ class ProductAdmin(admin.ModelAdmin):
 admin.site.register(models.Product, ProductAdmin)
 
 class CustomerAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user', 'name', 'locality', 'city', 'zipcode']
+    list_display = ['id', 'name', 'locality', 'city', 'zipcode']
 
 admin.site.register(models.Customer, CustomerAdmin)
 

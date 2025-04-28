@@ -5,7 +5,7 @@
 {% block main-content %}
 <div class="container my-5">
     <div class="row">
-        <h3>Welcome <span class="text-capitalize">{{ request.user }}</span></h3>
+        <h3>Welcome <span class="text-capitalize">{{ add.name }}</span></h3>
 
         <div class="col-sm-2 border-end">
             <ul class="list-unstyled">
@@ -15,25 +15,22 @@
         </div>
 
         <div class="col-sm-9 offset-sm-1">
-                {% for ad in add %}
                     <div class="col-sm-6 mb-3">
-                        {{ ad.label_tag }} {{ ad }} <small class="text-danger">{{ ad.errors|striptags }}</small>
                         <div class="card m-2">
                             <div class="card-body">
                                 <h3>Address: {{forloop.counter}}</h3>
-                                <p>Name: {{ad.name}}</p>
-                                <p>Locality: {{ad.locality}}</p>
-                                <p>Mobile: {{ad.mobile}}</p>
-                                <p>City: {{ad.city}}</p>
-                                <p>State: {{ad.state}}</p>
-                                <p>Pincode: {{ad.zipcode}}</p>
+                                <p>Name: {{add.name}}</p>
+                                <p>Locality: {{add.locality}}</p>
+                                <p>Mobile: {{add.mobile}}</p>
+                                <p>City: {{add.city}}</p>
+                                <p>State: {{add.state}}</p>
+                                <p>Pincode: {{add.zipcode}}</p>
                                 <p class="text-center">
-                                    <a href="{% url 'update_address' pk=ad.id %}" type="button" class="btn btn-primary btn-sm">Update</a>
+                                    <a href="{% url 'update_address' pk=add.id %}" type="button" class="btn btn-primary btn-sm">Update</a>
                                 </p> 
                             </div>
                         </div>
                     </div>
-                {% endfor %}
         </div>
     </div>
 </div>

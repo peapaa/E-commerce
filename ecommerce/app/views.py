@@ -72,7 +72,7 @@ class CustomerRegistrationView(View):
 class ProfileView(View):
     def get(self, request):
         try:
-            customer = Customer.objects.get(user=request.user)
+            customer = Customer.objects.get(id=request.user.id)
             form = CustomerProfileForm(instance=customer)
             context = {'form': form, 'active': 'btn-primary'} # Add active state for navbar
         except Customer.DoesNotExist:
@@ -81,32 +81,17 @@ class ProfileView(View):
         return render(request, 'app/profile.html', context)
 
     def post(self, request):
-        try:
-            customer = Customer.objects.get(user=request.user)
-            form = CustomerProfileForm(request.POST, instance=customer)
-        except Customer.DoesNotExist:
-             form = CustomerProfileForm(request.POST)
-             if form.is_valid():
-                 customer = form.save(commit=False)
-                 customer.user = request.user
-                 customer.save()
-                 messages.success(request, 'Profile created successfully!')
-                 return render(request, 'app/profile.html', {'form': form, 'active': 'btn-primary'})
-             else:
-                 messages.warning(request, 'Invalid Input Data')
-                 return render(request, 'app/profile.html', {'form': form, 'active': 'btn-primary'})
-
+        form = CustomerProfileForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
             messages.success(request, 'Profile updated successfully!')
         else:
-            messages.warning(request, 'Invalid Input Data')
-        
+            messages.warning(request, 'Invalid input data')
         context = {'form': form, 'active': 'btn-primary'} # Pass form back with errors if any
         return render(request, 'app/profile.html', context)
     
 def address(request):
-    add = Customer.objects.filter(user=request.user)
+    add = Customer.objects.get(id=request.user.id)
     context = {'add': add}
     return render(request, 'app/address.html', context)
 
@@ -229,4 +214,7 @@ class UpdateCart(View):
                 "total_cart": round(total_cart, 2)})
         except CartItem.DoesNotExist:
             return JsonResponse({"success": False, "error": "Cart item not found"})
+        
+
+
     

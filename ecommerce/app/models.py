@@ -1,9 +1,8 @@
 from django.db import models
 from .define import CATEGORY_CHOICES, STATE_CHOICES
 from .helper import *
-from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-
+from django.contrib.auth.models import AbstractUser
 # Create your models here.
 
 class Product(models.Model):
@@ -18,9 +17,14 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return self.title
-    
-class Customer(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+
+class Customer(AbstractUser):
+    email = models.EmailField(unique=True, max_length=200, blank=True, null=True)
+    username = models.CharField(max_length=200, unique=True, blank=True, null=True)
+    last_login=models.DateTimeField(auto_now=True, null=True, blank=True)
+    date_joined = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    password = models.CharField(max_length=255, null=True, blank=True)
     name = models.CharField(max_length=200)
     locality = models.CharField(max_length=200)
     city = models.CharField(max_length=200)
@@ -28,12 +32,14 @@ class Customer(models.Model):
     mobile = models.IntegerField()
     state = models.CharField(choices=STATE_CHOICES, max_length=100)
 
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username']
     def __str__(self):
         return self.name
 
 class Cart(models.Model):
     cart_id = models.CharField(unique=True, max_length=250, blank=True, null=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
+    user = models.OneToOneField(Customer, on_delete=models.CASCADE, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     @property
