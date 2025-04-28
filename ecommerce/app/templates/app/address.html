@@ -15,22 +15,22 @@
         </div>
 
         <div class="col-sm-9 offset-sm-1">
-                    <div class="col-sm-6 mb-3">
-                        <div class="card m-2">
-                            <div class="card-body">
-                                <h3>Address: {{forloop.counter}}</h3>
-                                <p>Name: {{add.name}}</p>
-                                <p>Locality: {{add.locality}}</p>
-                                <p>Mobile: {{add.mobile}}</p>
-                                <p>City: {{add.city}}</p>
-                                <p>State: {{add.state}}</p>
-                                <p>Pincode: {{add.zipcode}}</p>
-                                <p class="text-center">
-                                    <a href="{% url 'update_address' pk=add.id %}" type="button" class="btn btn-primary btn-sm">Update</a>
-                                </p> 
-                            </div>
+                <div class="col-sm-6 mb-3">
+                    <div class="card m-2">
+                        <div class="card-body">
+                            <h3>Address: {{forloop.counter}}</h3>
+                            <p>Name: {{add.name}}</p>
+                            <p>Locality: {{add.locality}}</p>
+                            <p>Mobile: {{add.mobile}}</p>
+                            <p>City: {{add.city}}</p>
+                            <p>State: {{add.state}}</p>
+                            <p>Pincode: {{add.zipcode}}</p>
+                            <p class="text-center">
+                                <a href="{% url 'update_address' pk=add.id %}" type="button" class="btn btn-primary btn-sm">Update</a>
+                            </p> 
                         </div>
                     </div>
+                </div>
         </div>
     </div>
 </div>

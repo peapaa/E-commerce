@@ -98,8 +98,11 @@
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              {% comment %} <img src="{% static "app/images/Neel.png" %}" width="50" height="50" alt="User Avatar" class="rounded-circle"> {% endcomment %}
-              Thiendd
+              {% if request.user.name %}
+                {{ request.user.name }}
+              {% else %}
+                {{ request.user.username }}
+              {% endif %}
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
               <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>

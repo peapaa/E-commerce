@@ -216,5 +216,4 @@ class UpdateCart(View):
             return JsonResponse({"success": False, "error": "Cart item not found"})
         
 
-
     
