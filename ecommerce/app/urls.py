@@ -36,6 +36,7 @@ urlpatterns = [
     name='password_reset_done'), 
     path('logout/',auth_view.LogoutView.as_view(next_page='login'), name='logout'), 
     path('cart/update/', views.UpdateCart.as_view(), name='update_cart_quantity'),
+    
 
 
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

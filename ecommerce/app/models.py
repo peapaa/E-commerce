@@ -15,6 +15,8 @@ class Product(models.Model):
     product_image = models.ImageField(upload_to=create_product_image_path)
     quantity = models.IntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
+    is_deleted = models.BooleanField(default=False)
+    
     def __str__(self):
         return self.title
 
@@ -53,7 +55,8 @@ class CartItem(models.Model):
     quantity = models.PositiveIntegerField(default=1)
     @property
     def total_cost(self):
-        print("cart", self.cart)
+        if self.product.is_deleted:
+            return 0  
         return self.quantity * self.product.discounted_price
     def __str__(self):
         return f"{self.product.title} x {self.quantity}"

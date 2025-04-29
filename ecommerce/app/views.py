@@ -134,7 +134,7 @@ def add_to_cart(request, product_id):
 
 def show_cart(request):
     cart = check_login(request)
-    cart_items =  cart.items.all() if cart else []
+    cart_items =  cart.items.filter(product__is_deleted = False) if cart else []
     total_price = sum(item.total_cost for item in cart_items)
     context =  {
         'cart_items': cart_items,
@@ -161,12 +161,6 @@ def check_login(request):
     
     return cart
 
-# class CustomLoginView(LoginView):
-#     def form_valid(self, form):
-#         response = super().form_valid(form)
-#         merge_carts(self.request)
-#         return response
-
 class UpdateCart(View):
     def post(self, request):
         cart = check_login(request)
@@ -174,7 +168,7 @@ class UpdateCart(View):
         product_id = data.get("product_id")
         action = data.get("action")
         try:
-            product = get_object_or_404(Product, id=product_id)
+            product = get_object_or_404(Product, id=product_id, is_deleted=False)
             cart_item = CartItem.objects.get(cart=cart, product=product)
             if action == "increase":
                 if cart_item.quantity < product.quantity:
@@ -189,7 +183,7 @@ class UpdateCart(View):
                 cart_item.quantity -=1
                 cart_item.save()
             total_item = cart_item.quantity * cart_item.product.discounted_price
-            total_cart = sum(item.quantity * item.product.discounted_price for item in CartItem.objects.filter(cart=cart))
+            total_cart = sum(item.quantity * item.product.discounted_price for item in CartItem.objects.filter(cart=cart, product__is_deleted=False))
             return JsonResponse({
                 "success": True,
                 "quantity": cart_item.quantity,
@@ -204,10 +198,10 @@ class UpdateCart(View):
         data = json.loads(request.body)
         product_id = data.get("product_id")
         try:
-            product = get_object_or_404(Product, id=product_id)
+            product = get_object_or_404(Product, id=product_id, is_deleted=False)
             cart_item = CartItem.objects.get(cart=cart, product=product)
             cart_item.delete()
-            total_cart = sum(item.quantity * item.product.discounted_price for item in CartItem.objects.filter(cart=cart))
+            total_cart = sum(item.quantity * item.product.discounted_price for item in CartItem.objects.filter(cart=cart, product__is_deleted=False))
             return JsonResponse({
                 "success": True,
                 "message": "Cart item deleted",
