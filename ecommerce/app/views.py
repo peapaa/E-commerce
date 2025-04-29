@@ -10,10 +10,12 @@ from uuid import uuid4
 import json
 from django.http import JsonResponse
 from .utils import paginate_queryset
+from django.db import connection
+from django.http import Http404
 
 # Create your views here.
 def home(request):
-    products = Product.objects.all().order_by('-created_at')
+    products = Product.objects.filter(is_deleted=False).order_by('-created_at')
     page_obj,page_range = paginate_queryset(request, products)
     context = {'page_obj': page_obj, 'page_range': page_range}
     return render(request, 'app/home.html',context)
@@ -26,18 +28,30 @@ def contact(request):
 
 class CategoryView(View):
     def get(self, request,val):
-        products = Product.objects.filter(category=val)
-        title = Product.objects.filter(category=val).values('title').annotate(total=Count('title'))
+        products = Product.objects.filter(category=val, is_deleted=False)
+        title = Product.objects.filter(category=val, is_deleted=False).values('title').annotate(total=Count('title'))
         page_obj,page_range = paginate_queryset(request, products)
-        context = {'val': val, 'products': products, 'title': title, 'page_obj': page_obj, 'page_range': page_range}
+        query = request.GET.get('q', '')
+        context = {
+            'title': title,
+            'query': query, 
+            'page_obj': page_obj,
+            'page_range': page_range,
+        }
         return render(request, 'app/category.html', context)
     
 class CategoryTitle(View):
     def get(self, request,val):
-        products = Product.objects.filter(title=val)
-        title = Product.objects.filter(category=products[0].category).values('title')
+        products = Product.objects.filter(title=val, is_deleted=False)
+        title = Product.objects.filter(category=products[0].category, is_deleted=False).values('title')
         page_obj,page_range = paginate_queryset(request, products)
-        context = {'val': val, 'products': products, 'title': title, 'page_obj': page_obj, 'page_range': page_range}
+        query = request.GET.get('q', '')
+        context = {
+            'title': title,
+            'query': query, 
+            'page_obj': page_obj,
+            'page_range': page_range,
+        }
         return render(request, 'app/category.html', context)
     
 class ProductDetailView(View):
@@ -209,5 +223,50 @@ class UpdateCart(View):
         except CartItem.DoesNotExist:
             return JsonResponse({"success": False, "error": "Cart item not found"})
         
+def search_products(query):
+    with connection.cursor() as cursor:
+        sql = """
+            SELECT id, title, selling_price, discounted_price, description,
+                   composition, category, product_image, quantity,
+                   created_at, is_deleted
+            FROM app_product
+            WHERE MATCH(title) AGAINST(%s IN NATURAL LANGUAGE MODE)
+            AND is_deleted = False
+        """
+        cursor.execute(sql, [query])
+        rows = cursor.fetchall()
 
+    products = []
+    for row in rows:
+        products.append(Product(
+            id=row[0], title=row[1], selling_price=row[2],
+            discounted_price=row[3], description=row[4],
+            composition=row[5], category=row[6],
+            product_image=row[7], quantity=row[8],
+            created_at=row[9], is_deleted=row[10]
+        ))
+    return products
+
+def search_view(request):
+    q = request.GET.get('search_text', '')
+    products = search_products(q) if q else Product.objects.all() 
+    page_obj, page_range = paginate_queryset(request, products)
     
+    context = {
+        'query': q,
+        'page_obj': page_obj,
+        'page_range': page_range,  
+    }
+    return render(request, 'app/home.html', context)
+
+def custom_400_view(request, exception):
+    return render(request, 'app/400.html', status=400)
+
+def custom_403_view(request, exception):
+    return render(request, 'app/403.html', status=403)
+
+def custom_404_view(request, exception):
+    return render(request, 'app/notFound.html', status=404)
+
+def custom_500_view(request):
+    return render(request, 'app/500.html', status=500)

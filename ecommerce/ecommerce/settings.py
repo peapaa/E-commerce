@@ -26,10 +26,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-p(kxa=22vvxg&0*q26pzif)tr-_6v4uxf1xedq!u0*xm9hccsj'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -52,6 +48,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware'
 ]
 
 ROOT_URLCONF = 'ecommerce.urls'
@@ -162,3 +159,8 @@ TIME_ZONE = 'Asia/Ho_Chi_Minh'
 USE_TZ = True  
 
 AUTH_USER_MODEL = 'app.Customer'
+
+DEBUG = True
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

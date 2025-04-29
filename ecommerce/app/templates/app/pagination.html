@@ -1,19 +1,19 @@
 <div class="pagination">
     {% if page_obj.has_previous %}
-        <a href="?page=1">«</a>
-        <a href="?page={{ page_obj.previous_page_number }}">‹</a>
+        <a href="?search_text={{ query }}&page=1">«</a>
+        <a href="?search_text={{ query }}&page={{ page_obj.previous_page_number }}">‹</a>
     {% endif %}
 
     {% for num in page_range %}
         {% if num == page_obj.number %}
             <strong>{{ num }}</strong>
         {% else %}
-            <a href="?page={{ num }}">{{ num }}</a>
+            <a href="?search_text={{ query }}&page={{ num }}">{{ num }}</a>
         {% endif %}
     {% endfor %}
 
     {% if page_obj.has_next %}
-        <a href="?page={{ page_obj.next_page_number }}">›</a>
-        <a href="?page={{ page_obj.paginator.num_pages }}">»</a>
+        <a href="?search_text={{ query }}&page={{ page_obj.next_page_number }}">›</a>
+        <a href="?search_text={{ query }}&page={{ page_obj.paginator.num_pages }}">»</a>
     {% endif %}
 </div>

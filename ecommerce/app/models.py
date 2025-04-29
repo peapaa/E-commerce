@@ -9,7 +9,7 @@ class Product(models.Model):
     title = models.CharField(max_length=200)
     selling_price = models.FloatField()
     discounted_price = models.FloatField()
-    description = models.TextField()
+    description = models.TextField(max_length=1000)
     composition = models.TextField(default='')
     category = models.CharField(choices=CATEGORY_CHOICES,max_length=100)
     product_image = models.ImageField(upload_to=create_product_image_path)
@@ -17,6 +17,10 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     is_deleted = models.BooleanField(default=False)
     
+    class Meta:
+        indexes = [
+            models.Index(fields=['title'], name='title_index'),
+        ]
     def __str__(self):
         return self.title
 

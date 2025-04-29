@@ -4,9 +4,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_view
 from .forms import LoginForm, MyPasswordResetForm, MyPasswordChangeForm, MySetPasswordForm
-# from .views import CustomLoginView
 
 urlpatterns = [
+    # path('not-found/', views.custom_404_view),
     path('',views.home, name='home'), 
     path('about/',views.about, name='about'), 
     path('contact/',views.contact, name='contact'), 
@@ -36,7 +36,7 @@ urlpatterns = [
     name='password_reset_done'), 
     path('logout/',auth_view.LogoutView.as_view(next_page='login'), name='logout'), 
     path('cart/update/', views.UpdateCart.as_view(), name='update_cart_quantity'),
-    
+    path('search/', views.search_view, name='search_view'),
 
 
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

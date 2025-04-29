@@ -82,10 +82,12 @@
               <a href="{% url 'contact' %}" class="nav-link text-white">Contact Us</a>
             </li>
           </ul>
-          <form class="d-flex" role="search">
+          <form class="d-flex" role="search" method="get" action="{% url 'search_view' %}">
             <input
               class="form-control me-2"
               type="search"
+              name="search_text"   
+              value="{{ query|default:'' }}"
               placeholder="Search"
               aria-label="Search"
             />
